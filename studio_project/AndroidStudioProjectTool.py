@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.7
+#!python3
 # -*- coding=utf-8 -*-
 
 # 遍历并修改所有的 gradle 项目为本地下载的版本
@@ -10,8 +10,31 @@
 import os
 import re
 
-MAC_GRADLE_PATH = '/Users/xander/.gradle'
-WIN_GRADLE_PATH = '/Users/xander/.gradle'
+import wx
+
+
+class GradleModel:
+    gradleVersion = ''
+    buildVersion = ''
+    _allList = []
+
+    def __init__(self, gVersion, bVersion):
+        super().__init__()
+        self.gradleVersion = gVersion
+        self.buildVersion = bVersion
+
+    def _findAllGradleModels(self):
+        return [GradleModel('', '')]
+
+    def all(self):
+        if self._allList.lenth == 0:
+            self._allList = self._findAllGradleModels()
+        return self._allList
+
+
+
+MAC_GRADLE_PATH = '/Users/Xander/.gradle'
+WIN_GRADLE_PATH = '/Users/Xander/.gradle'
 IS_MAC_OS = True
 GRADLE_PATH = MAC_GRADLE_PATH
 if not IS_MAC_OS:
@@ -107,13 +130,30 @@ def modifyAndroidProjectConfig(projectPath):
 
 
 # modifyAndroidProjectConfig('/Users/xander/Data/pptv_code/PersonalizedMode')
-WORK_DIR_PATH = '/Users/xander/Data/github'
+WORK_DIR_PATH = '/Users/Xander/Data/github'
 
-projects = os.listdir(WORK_DIR_PATH)
-for project in projects:
-    projectPath = WORK_DIR_PATH + os.sep + project
-    buildFilePath = projectPath + os.sep + BUILD_FILE_NAME
-    gradleFilePath = projectPath + os.sep + GRADLE_FILE_NAME
-    if os.path.exists(buildFilePath) and os.path.exists(gradleFilePath):
-        print('find %s' % (projectPath))
-        modifyAndroidProjectConfig(projectPath)
+# projects = os.listdir(WORK_DIR_PATH)
+# for project in projects:
+#     projectPath = WORK_DIR_PATH + os.sep + project
+#     buildFilePath = projectPath + os.sep + BUILD_FILE_NAME
+#     gradleFilePath = projectPath + os.sep + GRADLE_FILE_NAME
+#     if os.path.exists(buildFilePath) and os.path.exists(gradleFilePath):
+#         print('find %s' % (projectPath))
+#         modifyAndroidProjectConfig(projectPath)
+
+
+app = wx.App()
+window = wx.Frame(None, title="Android Stuido Project Tools", size=(400, 300))
+panel = wx.Panel(window)
+# path
+pathBox = wx.BoxSizer(wx.HORIZONTAL)
+pathText = wx.StaticText(panel, label="根路径:")
+pathBox.Add(pathText, 0,  wx.FIXED_MINSIZE)
+pathInpute = wx.TextCtrl(panel)
+pathBox.Add(pathInpute, 0, wx.ALIGN_CENTER_HORIZONTAL)
+panel.SetSizer(pathBox) 
+
+label = wx.StaticText(panel, label="Hello World", pos=(100, 100))
+window.Show(True)
+app.MainLoop()
+
